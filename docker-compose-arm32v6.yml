@@ -5,6 +5,6 @@ services:
     image: sensors
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.arm32v6
     ports:
       - 80:5000
