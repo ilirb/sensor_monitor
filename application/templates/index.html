@@ -42,7 +42,7 @@
     var door_temp = new EventSource("/api/entrancetemp");
     door_temp.onmessage = function(e) {
       var obj = JSON.parse(e.data);
-      console.log(obj);
+      // console.log(obj);
       $("#name_corridor_temp").html(obj.name)
       $("#corridor_temp").html(obj.status)
 
