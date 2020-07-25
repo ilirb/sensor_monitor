@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    # - name: Build docker arm32v6
+    #   run: |
+    #     docker buildx create --use --name mybuild --platform linux/arm/v6
+    #     docker buildx build --platform linux/arm/v6 -f Dockerfile.arm32v6 -t ilirb/sensor-monitor .
+    #     # docker buildx build --platform linux/arm64,linux/arm/v7,linux/arm/v7 --push -t jasonrandrews/hello .
+
+    - name: Set up Docker Buildx
+      id: buildx
+      uses: crazy-max/ghaction-docker-buildx@v3
+      with:
+        buildx-version: latest
+        qemu-version: latest
+
+    - name: Available platforms
+      run: echo ${{ steps.buildx.outputs.platforms }}
+
+    - name: Run Buildx
+      run: |
+        docker buildx build \
+          --platform linux/arm/v6 \
+          --output "type=image,push=false" \
+          --file Dockerfile.arm32v6 .
