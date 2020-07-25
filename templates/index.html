@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td id="name_door"></td>
+            <td><span id="doorstatus" class="badge badge-success"></td>
+          </tr>
+          <tr>
+            <td id="name_corridor_temp"></td>
+            <td id="corridor_temp"></td>
+          </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<script>
+    var door = new EventSource("/api/entrance");
+    door.onmessage = function(e) {
+        var obj = JSON.parse(e.data);
+        // console.log(obj);
+        $("#name_door").html(obj.name)
+        if(String(obj.status) === "true") {
+            $("#doorstatus").removeClass("badge-danger").addClass("badge-success").html("Closed");
+        } else if(String(obj.status) === "false") {
+            $("#doorstatus").removeClass("badge-success").addClass("badge-danger").html("Open");
+        } else {
+            $("#doorstatus").removeClass("badge-success").addClass("badge-danger").html("Error");
+        }
+    };
+
+    var door_temp = new EventSource("/api/entrancetemp");
+    door_temp.onmessage = function(e) {
+      var obj = JSON.parse(e.data);
+      console.log(obj);
+      $("#name_corridor_temp").html(obj.name)
+      $("#corridor_temp").html(obj.status)
+
+    }
+</script>
+
+{% endblock %}

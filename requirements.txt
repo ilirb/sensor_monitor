@@ -1,0 +1,4 @@
+gpiozero
+pigpio
+flask
+# gunicorn
