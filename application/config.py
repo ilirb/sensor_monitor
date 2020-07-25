@@ -13,5 +13,5 @@ log.addHandler(ch)
 
 pin = {
     "doorSwitch": 2,
-    "corridorDHT": 12
+    "corridorDHT": 4
 }

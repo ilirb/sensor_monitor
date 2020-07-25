@@ -1,10 +1,8 @@
 import json
-import logging
 
 from flask import Flask, Response, render_template, stream_with_context
 
-import config
-import devices
+from application import devices
 
 app = Flask(__name__)
 
