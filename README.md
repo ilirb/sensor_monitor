@@ -9,21 +9,66 @@ Simple Flask app to run on Raspberry and display different sensors
 - [DHT22 Temperature and Humidity sensor](https://www.aliexpress.com/wholesale?catId=0&initiative_id=SB_20200725121509&SearchText=dht22)
 
 
-## Setup
+## Using Docker
 
+### Prepare
+
+``` bash
+sudo apt-get update && sudo apt-get upgrade -y
+
+# Required for docker-compose and git
+sudo apt-get install -y git python3-pip
+
+# Install docker
+curl -sSL https://get.docker.com | sh
+sudo usermod -aG docker pi
+
+# Install docker-compose
+sudo pip3 install docker-compose
 ```
-sudo apt-get update
+
+### Run sensor_monitor
+
+``` bash
+git clone https://github.com/ilirb/sensor_monitor.git
+cd sensor_monitor
+
+docker-compose up
+
+# to run in background and start on boot
+docker-compose up -d
+
+# to update
+docker-compose pull && docker-compose up -d
+
+# to stop and remove
+docker-compose stop
+docker-compose down
+```
+
+### Run without docker-compose
+
+``` bash
+docker run -p 5000:5000 --privileged ilirb/sensor-monitor:latest
+```
+
+## Running without docker
+
+### Prepare environment
+
+``` bash
+sudo apt-get update && sudo apt-get upgrade -y
 sudo apt-get install -y git supervisor authbind python3 python3-pip python3-venv
 git clone https://github.com/ilirb/sensor_monitor
 cd sensor_monitor
 pip3 install -r requirements.txt
 ```
 
-### gunicorn
+### Setup gunicorn
 
 This is required to allow listening on port 80 without sudo
 
-```
+``` bash
 sudo touch /etc/authbind/byport/80
 sudo chmod 500 /etc/authbind/byport/80
 sudo chown pi /etc/authbind/byport/80
@@ -31,7 +76,9 @@ sudo chown pi /etc/authbind/byport/80
 
 ### Supervisor
 
-```
+This makes sensor_monitor run as a service and on boot
+
+``` bash
 sudo ln -s $PWD/sensor_monitor.conf /etc/supervisor/conf.d/sensor_monitor.conf
 sudo supervisorctl reread
 sudo service supervisor restart
@@ -39,23 +86,19 @@ sudo service supervisor restart
 
 ### Run manually without supervisor
 
-```
+``` bash
 authbind gunicorn --bind 0.0.0.0:80 run:app
 ```
 
-## Docker
+## Configuration
 
-```
-sudo apt-get update && sudo apt-get upgrade -y
-sudo apt-get install -y python3-pip
-curl -sSL https://get.docker.com | sh
-sudo usermod -aG docker pi
-sudo pip3 install docker-compose
-```
+Edit `application/config.py` and adjust pins to sensors/devices connected to Raspberry Pi GPIO
+
+Sensor logic resides in `application/devices.py`
 
 ## TODO
 
-- Docker images/stacks
+- Add multiplatform docker builds (armv7,armv8,arm64)
 - Notifications
 - InfluxDB
 - Web authentication
