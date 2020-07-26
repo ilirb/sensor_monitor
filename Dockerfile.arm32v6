@@ -14,7 +14,7 @@ ADD requirements.txt .
 RUN apk add --no-cache --virtual build-deps gcc musl-dev && \
     python -m pip install setuptools wheel && \
     python -m pip install -r requirements.txt && \
-    apk del build-deps
+    apk del build-deps && apk add --no-cache libgpiod
 
 WORKDIR /app
 ADD . /app

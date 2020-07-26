@@ -2,6 +2,6 @@ gpiozero
 pigpio
 flask
 gunicorn
-Adafruit_DHT
+# Adafruit_DHT
 RPi.GPIO
-# adafruit-circuitpython-dht
+adafruit-circuitpython-dht
