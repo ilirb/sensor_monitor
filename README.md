@@ -43,6 +43,16 @@ sudo service supervisor restart
 authbind gunicorn --bind 0.0.0.0:80 run:app
 ```
 
+## Docker
+
+```
+sudo apt-get update && sudo apt-get upgrade -y
+sudo apt-get install -y python3-pip
+curl -sSL https://get.docker.com | sh
+sudo usermod -aG docker pi
+sudo pip3 install docker-compose
+```
+
 ## TODO
 
 - Docker images/stacks

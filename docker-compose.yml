@@ -3,6 +3,7 @@ version: '3.4'
 services:
   sensors:
     image: sensors
+    restart: unless-stopped
     build:
       context: .
       dockerfile: Dockerfile.arm32v6

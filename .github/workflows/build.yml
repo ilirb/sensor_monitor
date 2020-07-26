@@ -4,11 +4,37 @@ on:
   push:
     branches: [master]
 
+env:
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_IMAGE: ilirb/sensor-monitor
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+
+    - name: Prepare
+      id: prepare
+      run: |
+        DOCKER_PLATFORMS=linux/arm/v6
+        VERSION=edge
+        if [[ $GITHUB_REF == refs/tags/* ]]; then
+          TAG=${GITHUB_REF#refs/tags/}
+          VERSION=${TAG%-*}
+        fi
+        TAGS="--tag ${DOCKER_IMAGE}:${VERSION}"
+        if [ "$VERSION" != "edge" ]; then
+          TAGS="$TAGS --tag ${DOCKER_IMAGE}:latest"
+        fi
+        echo ::set-output name=docker_username::${DOCKER_USERNAME}
+        echo ::set-output name=docker_image::${DOCKER_IMAGE}
+        echo ::set-output name=version::${VERSION}
+        echo ::set-output name=buildx_args::--platform ${DOCKER_PLATFORMS} \
+          --build-arg VERSION=${VERSION} \
+          --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
+          --build-arg VCS_REF=${GITHUB_SHA::8} \
+          ${TAGS} --file Dockerfile.arm32v6 .
 
     # - name: Build docker arm32v6
     #   run: |
@@ -19,16 +45,19 @@ jobs:
     - name: Set up Docker Buildx
       id: buildx
       uses: crazy-max/ghaction-docker-buildx@v3
-      with:
-        buildx-version: latest
-        qemu-version: latest
 
     - name: Available platforms
       run: echo ${{ steps.buildx.outputs.platforms }}
 
+    - name: Docker login
+      env:
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: echo "${DOCKER_PASSWORD}" | docker login --username "${DOCKER_USERNAME}" --password-stdin
+
     - name: Run Buildx
       run: |
-        docker buildx build \
-          --platform linux/arm/v6 \
-          --output "type=image,push=false" \
-          --file Dockerfile.arm32v6 .
+        docker buildx build --output "type=image,push=true" ${{ steps.prepare.outputs.buildx_args }}
+        # docker buildx build \
+        #   --platform linux/arm/v6 \
+        #   --output "type=image,push=false" \
+        #   --file Dockerfile.arm32v6 .
