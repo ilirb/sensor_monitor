@@ -1,5 +1,5 @@
 # For more information, please refer to https://aka.ms/vscode-docker-python
-FROM arm32v6/python:3-alpine
+FROM ilirb/sensor-monitor:build-arm32v6
 
 EXPOSE 5000
 
@@ -12,9 +12,8 @@ ENV PYTHONUNBUFFERED 1
 # Install pip requirements
 ADD requirements.txt .
 RUN apk add --no-cache --virtual build-deps gcc musl-dev && \
-    python -m pip install setuptools wheel && \
     python -m pip install -r requirements.txt && \
-    apk del build-deps && apk add --no-cache libgpiod
+    apk del build-deps
 
 WORKDIR /app
 ADD . /app
