@@ -2,8 +2,11 @@ version: '3.4'
 
 services:
   sensors:
-    image: ilirb/sensor-monitor:latest
+    image: sensors
     restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile.arm32v6
     ports:
       - 80:5000
     # # Preferably this should be used over privileged but it's not working

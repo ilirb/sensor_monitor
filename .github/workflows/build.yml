@@ -17,8 +17,9 @@ jobs:
     - name: Prepare
       id: prepare
       run: |
+        export
         DOCKER_PLATFORMS=linux/arm/v6
-        VERSION=edge
+        VERSION=$GITHUB_SHA
         if [[ $GITHUB_REF == refs/tags/* ]]; then
           TAG=${GITHUB_REF#refs/tags/}
           VERSION=${TAG%-*}
@@ -36,18 +37,9 @@ jobs:
           --build-arg VCS_REF=${GITHUB_SHA::8} \
           ${TAGS} --file Dockerfile.arm32v6 .
 
-    # - name: Build docker arm32v6
-    #   run: |
-    #     docker buildx create --use --name mybuild --platform linux/arm/v6
-    #     docker buildx build --platform linux/arm/v6 -f Dockerfile.arm32v6 -t ilirb/sensor-monitor .
-    #     # docker buildx build --platform linux/arm64,linux/arm/v7,linux/arm/v7 --push -t jasonrandrews/hello .
-
     - name: Set up Docker Buildx
       id: buildx
       uses: crazy-max/ghaction-docker-buildx@v3
-
-    - name: Available platforms
-      run: echo ${{ steps.buildx.outputs.platforms }}
 
     - name: Docker login
       env:
@@ -56,8 +48,5 @@ jobs:
 
     - name: Run Buildx
       run: |
+        echo ${{ steps.buildx.outputs.platforms }}
         docker buildx build --output "type=image,push=true" ${{ steps.prepare.outputs.buildx_args }}
-        # docker buildx build \
-        #   --platform linux/arm/v6 \
-        #   --output "type=image,push=false" \
-        #   --file Dockerfile.arm32v6 .
