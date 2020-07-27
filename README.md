@@ -2,6 +2,20 @@
 
 Simple Flask app to run on Raspberry and display different sensors
 
+- [sensor_monitor](#sensor_monitor)
+  - [Hardware](#hardware)
+  - [Using Docker](#using-docker)
+    - [Prepare](#prepare)
+    - [Run sensor_monitor](#run-sensor_monitor)
+    - [Run without docker-compose](#run-without-docker-compose)
+  - [Running without docker](#running-without-docker)
+    - [Prepare environment](#prepare-environment)
+    - [Setup gunicorn](#setup-gunicorn)
+    - [Supervisor](#supervisor)
+    - [Run manually without supervisor](#run-manually-without-supervisor)
+  - [Configuration](#configuration)
+  - [TODO](#todo)
+
 ## Hardware
 
 - Raspberry Pi
