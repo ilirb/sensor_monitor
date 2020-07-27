@@ -2,7 +2,7 @@ import json
 
 from flask import Flask, Response, render_template, stream_with_context
 
-from application import devices
+import devices.devices as devices
 
 app = Flask(__name__)
 

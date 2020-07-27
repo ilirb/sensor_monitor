@@ -1,5 +1,5 @@
 from gpiozero import Button
-from application.config import log, pin
+from config import log, pin
 
 
 def get_entrance_door():

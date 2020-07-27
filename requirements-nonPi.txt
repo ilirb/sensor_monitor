@@ -3,5 +3,3 @@ gpiozero
 pigpio
 flask
 gunicorn
-Adafruit_DHT
-RPi.GPIO
