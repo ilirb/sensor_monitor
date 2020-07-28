@@ -75,7 +75,12 @@ sudo apt-get update && sudo apt-get upgrade -y
 sudo apt-get install -y git supervisor authbind python3 python3-pip python3-venv
 git clone https://github.com/ilirb/sensor_monitor
 cd sensor_monitor
+
+# On non Rasbperry Pi machine (dev)
 pip3 install -r requirements.txt
+
+# On Raspberry Pi
+pip3 install -r requirements.txt -r requirements-RPi.txt
 ```
 
 ### Setup gunicorn
