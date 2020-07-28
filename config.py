@@ -1,5 +1,10 @@
-import logging
+import os
 import sys
+import logging
+
+# Constants
+PUSHBULLET_URI="https://api.pushbullet.com/v2"
+
 
 # Basic logger
 log = logging.getLogger('sensor_monitor')
@@ -10,7 +15,7 @@ formatter = logging.Formatter('%(asctime)s : %(message)s', datefmt='%Y-%m-%d %H:
 ch.setFormatter(formatter)
 log.addHandler(ch)
 
-
+# GPIO Devices
 pin = {
     "doorSwitch": 2,
     "corridorDHT": 4

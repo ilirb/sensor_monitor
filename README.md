@@ -114,6 +114,7 @@ Sensor logic resides in `application/devices.py`
 
 - Add multiplatform docker builds (armv7,armv8,arm64)
 - Notifications
+- Alerts (IFTTT like)
 - InfluxDB
 - Web authentication
 - Web configuration (Sensors, notifications, etc)
