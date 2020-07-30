@@ -11,7 +11,7 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "env": {
-                "PIGPIO_ADDR": "192.168.0.42"
+                "PIGPIO_ADDR": "192.168.0.20"
             }
         },
         {
@@ -24,7 +24,7 @@
                 "FLASK_APP": "run.py",
                 "FLASK_ENV": "development",
                 "FLASK_DEBUG": "1",
-                "PIGPIO_ADDR": "192.168.0.42"
+                "PIGPIO_ADDR": "192.168.0.20"
             },
             "args": [
                 "run",

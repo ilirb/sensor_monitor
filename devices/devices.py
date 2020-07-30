@@ -1,3 +1,4 @@
+'''SensorMonitor connected devices'''
 from gpiozero import Button
 from config import log, pin
 
